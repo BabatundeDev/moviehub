@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Star, TrendingUp, Calendar, Film } from 'lucide-react';
+import { Home, Star, TrendingUp, Calendar, Film, X } from 'lucide-react';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home, end: true },
@@ -8,22 +8,38 @@ const navItems = [
   { to: '/upcoming', label: 'Upcoming', icon: Calendar },
 ];
 
-export function Sidebar() {
+interface Props {
+  onClose?: () => void;
+}
+
+export function Sidebar({ onClose }: Props) {
   return (
     <aside
       style={{ background: 'var(--color-surface)', borderRight: '1px solid var(--color-border)' }}
-      className="w-56 min-h-screen flex flex-col flex-shrink-0"
+      className="w-56 h-full min-h-screen flex flex-col flex-shrink-0"
     >
-      <div className="p-5 flex items-center gap-3 mb-2">
-        <div
-          style={{ background: 'var(--color-accent)' }}
-          className="w-9 h-9 rounded-xl flex items-center justify-center"
-        >
-          <Film size={18} color="white" />
+      <div className="p-5 flex items-center justify-between mb-2">
+        <div className="flex items-center gap-3">
+          <div
+            style={{ background: 'var(--color-accent)' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center"
+          >
+            <Film size={18} color="white" />
+          </div>
+          <span className="font-display font-bold text-lg" style={{ color: 'var(--color-text)' }}>
+            MovieHub
+          </span>
         </div>
-        <span className="font-display font-bold text-lg" style={{ color: 'var(--color-text)' }}>
-          MovieHub
-        </span>
+
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-lg transition-opacity hover:opacity-70"
+            style={{ color: 'var(--color-muted)' }}
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 px-3">
@@ -32,11 +48,10 @@ export function Sidebar() {
             key={to}
             to={to}
             end={end}
+            onClick={onClose}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 text-sm font-medium transition-all ${
-                isActive
-                  ? 'text-white'
-                  : 'hover:opacity-80'
+                isActive ? 'text-white' : 'hover:opacity-80'
               }`
             }
             style={({ isActive }) => ({
