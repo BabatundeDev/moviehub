@@ -16,7 +16,7 @@ export function Sidebar({ onClose }: Props) {
   return (
     <aside
       style={{ background: 'var(--color-surface)', borderRight: '1px solid var(--color-border)' }}
-      className="w-56 h-full min-h-screen flex flex-col flex-shrink-0"
+      className="w-56 h-screen sticky top-0 flex flex-col flex-shrink-0"
     >
       <div className="p-5 flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">

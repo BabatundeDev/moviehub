@@ -7,7 +7,7 @@ export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen relative">
+    <div className="flex h-screen overflow-hidden relative">
 
       {sidebarOpen && (
         <div
@@ -17,15 +17,18 @@ export function AppLayout() {
         />
       )}
 
+      {/* Sidebar — fixed on mobile, static full-height on desktop */}
       <div
-        className={`fixed top-0 left-0 h-full z-30 transition-transform duration-300 lg:static lg:translate-x-0 lg:z-auto ${
+        className={`fixed top-0 left-0 h-full z-30 transition-transform duration-300 lg:static lg:h-full lg:translate-x-0 lg:z-auto lg:flex-shrink-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
 
-      <main className="flex-1 overflow-auto min-w-0" style={{ background: 'var(--color-bg)' }}>
+      {/* Main scrollable content */}
+      <main className="flex-1 overflow-y-auto min-w-0" style={{ background: 'var(--color-bg)' }}>
+        {/* Mobile top bar */}
         <div
           className="flex items-center gap-3 px-4 py-3 lg:hidden sticky top-0 z-10"
           style={{

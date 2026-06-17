@@ -32,10 +32,7 @@ export function MovieDetailPage() {
     return (
       <div className="p-6 animate-pulse">
         <div className="h-8 w-20 rounded mb-6" style={{ background: 'var(--color-surface-2)' }} />
-        <div
-          className="w-full h-64 rounded-2xl mb-8"
-          style={{ background: 'var(--color-surface-2)' }}
-        />
+        <div className="w-full h-64 rounded-2xl mb-8" style={{ background: 'var(--color-surface-2)' }} />
         <MovieGridSkeleton count={5} />
       </div>
     );
@@ -57,31 +54,34 @@ export function MovieDetailPage() {
   ];
 
   return (
-    <div>
+    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
+      {/* Backdrop — taller and fades fully before content */}
       {backdrop && (
-        <div className="relative w-full h-56 overflow-hidden">
+        <div className="relative w-full h-48 sm:h-64 overflow-hidden">
           <img src={backdrop} alt="" className="w-full h-full object-cover object-top" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(to bottom, rgba(13,15,20,0.4) 0%, rgba(13,15,20,1) 100%)',
+                'linear-gradient(to bottom, rgba(13,15,20,0.2) 0%, rgba(13,15,20,0.85) 70%, rgba(13,15,20,1) 100%)',
             }}
           />
         </div>
       )}
 
-      <div className="px-6 pb-8" style={{ marginTop: backdrop ? '-4rem' : '1.5rem' }}>
+      <div className="px-4 sm:px-6 pb-8" style={{ marginTop: backdrop ? '-1rem' : '1.5rem' }}>
+        {/* Back button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm mb-6 transition-opacity hover:opacity-70"
+          className="flex items-center gap-2 text-sm mb-5 transition-opacity hover:opacity-70"
           style={{ color: 'var(--color-muted)' }}
         >
           <ArrowLeft size={15} /> Back
         </button>
 
-        <div className="flex gap-6 mb-8">
-          <div className="flex-shrink-0 w-36 rounded-xl overflow-hidden shadow-2xl">
+        {/* Poster + Info row */}
+        <div className="flex gap-4 mb-6">
+          <div className="flex-shrink-0 w-28 sm:w-36 rounded-xl overflow-hidden shadow-2xl self-start">
             <img
               src={posterUrl(movie.poster_path, 'w342')}
               alt={movie.title}
@@ -89,16 +89,17 @@ export function MovieDetailPage() {
             />
           </div>
 
-          <div className="flex-1 min-w-0 pt-2">
+          <div className="flex-1 min-w-0 pt-1">
             <h1
-              className="font-display font-bold text-2xl leading-tight"
+              className="font-display font-bold text-lg sm:text-2xl leading-tight"
               style={{ color: 'var(--color-text)' }}
             >
               {movie.title}
             </h1>
 
+            {/* Meta row */}
             <div
-              className="flex items-center gap-3 mt-2 text-sm"
+              className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-xs sm:text-sm"
               style={{ color: 'var(--color-muted)' }}
             >
               {movie.release_date && <span>{movie.release_date.split('-')[0]}</span>}
@@ -106,7 +107,7 @@ export function MovieDetailPage() {
                 <>
                   <span>·</span>
                   <span className="flex items-center gap-1">
-                    <Clock size={12} />
+                    <Clock size={11} />
                     {formatRuntime(movie.runtime)}
                   </span>
                 </>
@@ -115,57 +116,52 @@ export function MovieDetailPage() {
                 <>
                   <span>·</span>
                   <span className="flex items-center gap-1 uppercase">
-                    <Globe size={12} />
+                    <Globe size={11} />
                     {movie.original_language}
                   </span>
                 </>
               )}
             </div>
 
-            <div className="flex items-center gap-3 mt-3">
-              <div className="flex items-center gap-1.5">
-                <Star size={16} fill="#f5c518" color="#f5c518" />
-                <span className="font-semibold text-base" style={{ color: 'var(--color-text)' }}>
-                  {movie.vote_average.toFixed(1)}
-                </span>
-                <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                  ({movie.vote_count.toLocaleString()} votes)
-                </span>
-              </div>
-
-              <button
-                onClick={() => setFavorited(f => !f)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                style={{
-                  background: favorited ? '#ef4444' : 'var(--color-surface)',
-                  border: `1px solid ${favorited ? '#ef4444' : 'var(--color-border)'}`,
-                  color: favorited ? 'white' : 'var(--color-muted)',
-                }}
-              >
-                <Heart size={14} fill={favorited ? 'white' : 'none'} />
-                {favorited ? 'Saved' : 'Add to Favorites'}
-              </button>
+            {/* Rating */}
+            <div className="flex items-center gap-1.5 mt-3">
+              <Star size={15} fill="#f5c518" color="#f5c518" />
+              <span className="font-semibold text-sm sm:text-base" style={{ color: 'var(--color-text)' }}>
+                {movie.vote_average.toFixed(1)}
+              </span>
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                ({movie.vote_count.toLocaleString()} votes)
+              </span>
             </div>
 
+            {/* Favorites button — sits below rating, full width on mobile */}
+            <button
+              onClick={() => setFavorited(f => !f)}
+              className="flex items-center justify-center gap-2 mt-3 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all w-full sm:w-auto cursor-pointer"
+              style={{
+                background: favorited ? '#ef4444' : 'var(--color-accent)',
+                border: `1px solid ${favorited ? '#ef4444' : 'var(--color-accent)'}`,
+                color: 'white',
+              }}
+            >
+              <Heart size={13} fill={favorited ? 'white' : 'none'} />
+              {favorited ? 'Saved' : 'Add to Favorites'}
+            </button>
+
             {movie.tagline && (
-              <p
-                className="mt-3 text-sm italic"
-                style={{ color: 'var(--color-muted)' }}
-              >
+              <p className="mt-3 text-xs sm:text-sm italic" style={{ color: 'var(--color-muted)' }}>
                 "{movie.tagline}"
               </p>
             )}
           </div>
         </div>
 
+        {/* Overview card */}
         <div
-          className="rounded-2xl p-5 mb-6"
+          className="rounded-2xl p-4 sm:p-5 mb-6"
           style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
         >
-          <h2
-            className="font-display font-semibold text-sm mb-2"
-            style={{ color: 'var(--color-text)' }}
-          >
+          <h2 className="font-display font-semibold text-sm mb-2" style={{ color: 'var(--color-text)' }}>
             Overview
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
@@ -174,10 +170,7 @@ export function MovieDetailPage() {
 
           {movie.genres && movie.genres.length > 0 && (
             <div className="mt-4">
-              <h3
-                className="font-display font-semibold text-sm mb-2"
-                style={{ color: 'var(--color-text)' }}
-              >
+              <h3 className="font-display font-semibold text-sm mb-2" style={{ color: 'var(--color-text)' }}>
                 Genres
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -212,6 +205,7 @@ export function MovieDetailPage() {
           </div>
         </div>
 
+        {/* Similar movies */}
         {similar?.results && similar.results.length > 0 && (
           <section>
             <SectionHeader title="Similar Movies" />
